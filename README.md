@@ -62,13 +62,13 @@ Update the $HOME/.bashrc file with below line
 Then logoff and login back
 
 ## NameNode Format and Hive metastore initialize
-* /usr/bigdata/Env/1.0.0/scripts/install.sh fresh_install
+* /usr/bigdata/Env/1.0.0/scripts/bigadm.sh fresh_install
 ## Managing hadoop services
 ### stop and start services
 ```
-/usr/bigdata/Env/1.0.0/scripts/install.sh stop
-/usr/bigdata/Env/1.0.0/scripts/install.sh start
-/usr/bigdata/Env/1.0.0/scripts/install.sh status
+/usr/bigdata/Env/1.0.0/scripts/bigadm.sh  stop
+/usr/bigdata/Env/1.0.0/scripts/bigadm.sh  start
+/usr/bigdata/Env/1.0.0/scripts/bigadm.sh  status
 ```
 ![image](https://user-images.githubusercontent.com/10299142/144044045-c2df8f26-3fd4-4911-8d20-770924aca6b4.png)
 ### Basic hdfs admin commands

@@ -8,7 +8,7 @@
 * yum install java-1.8.0-openjdk.x86_64
 * yum install java-1.8.0-openjdk-devel
 * yum install git
-## Install and setup Ant
+## Install and setup ant
 * wget https://archive.apache.org/dist/ant/binaries/apache-ant-1.9.16-bin.tar.gz -P $HOME/
 * tar -xvf apache-ant-1.9.16-bin.tar.gz -C $HOME/
 ## Download the Apache hadoop installation github files

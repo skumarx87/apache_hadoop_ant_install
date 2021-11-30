@@ -160,6 +160,13 @@ case "$1" in
 		log ''
 	;;
 	fresh_install)
+<<<<<<< HEAD
+=======
+		#setup_ant
+		#log ''
+		#install_java
+		log ''
+>>>>>>> 13a0eceb6e64961a980b0aeca4851ddde170bc5e
 		format_namenode
 		log ''
 		hivems_initSchema

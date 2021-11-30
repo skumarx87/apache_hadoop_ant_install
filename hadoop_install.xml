@@ -7,6 +7,9 @@
 			<not><available file="${bigdata.props.file}" /></not>
 		</condition>
 	</fail>
+     <property environment="env"/>
+	<fail unless="env.JAVA_HOME" message="Missing environment property JAVA_HOME"/>
+
     <property file="${bigdata.props.file}"/>
     <fail unless="bigdata.root" message="Missing property 'bigdata.root'" />
     <fail unless="hadoop.version" message="Missing property 'hadoop.version'" />
@@ -86,8 +89,8 @@
     </condition>
 
 
-<!-- <target name="install" depends="build_init, download, unpack_archive,update_profile_path,update_conf" /> -->
-<target name="install" depends="build_init, update_profile_path, update_conf" />
+ <target name="install" depends="build_init, download, unpack_archive,update_profile_path,update_conf, create_soft_link" />
+<!-- <target name="install" depends="build_init, update_profile_path, update_conf" /> -->
 
     <target name="build_init">
 
@@ -176,6 +179,9 @@
     <target name="update_profile_path">
 	<copy overwrite="true" file="conf/bigdata-user-profile.sh.template" tofile="${bigdata.install.dir}/scripts/bigdata-user-profile.sh.template" />
 	<replaceregexp file="${bigdata.install.dir}/scripts/bigdata-user-profile.sh.template" match="BIGDATA_ROOT=(.*)" replace="BIGDATA_ROOT=${bigdata.root}/Env/${bigdata.release.version}" byline="true"/>
+	<replaceregexp file="${bigdata.install.dir}/scripts/bigdata-user-profile.sh.template" match="JAVA_HOME=(.*)" replace="JAVA_HOME=${env.JAVA_HOME}" byline="true"/>
+	<replaceregexp file="${bigdata.dir.hadoop}/etc/hadoop/hadoop-env.sh" match="JAVA_HOME=(.*)" replace="JAVA_HOME=${env.JAVA_HOME}" byline="true"/>
+	<replaceregexp file="${bigdata.dir.hive}/conf/hive-env.sh" match="JAVA_HOME=(.*)" replace="JAVA_HOME=${env.JAVA_HOME}" byline="true"/>
 	<replaceregexp file="${bigdata.dir.hadoop}/etc/hadoop/hadoop-env.sh" match="HADOOP_PID_DIR=(.*)" replace="HADOOP_PID_DIR=${bigdata.dir.hadoop}/etc/hadoop" byline="true"/>
 	
     </target>
@@ -203,6 +209,8 @@
         <copy overwrite="true" file="conf/spark-defaults.conf.template" tofile="${bigdata.dir.spark}/conf/spark-defaults.conf" />
         <copy overwrite="true" file="conf/spark.log4j.properties.template" tofile="${bigdata.dir.spark}/conf/log4j.properties" />
         <copy overwrite="true" file="conf/spark-hive-site.xml.template" tofile="${bigdata.dir.spark}/conf/hive-site.xml" />
+        
+	<copy overwrite="true" file="scripts/install.sh" tofile="${bigdata.dir.scripts}/install.sh" />
 
         <copy overwrite="true" file="${slaves.file}" tofile="${bigdata.dir.hadoop}/etc/hadoop/slaves" />
         <symlink overwrite="true" link="${bigdata.dir.spark}/conf/slaves" resource="${bigdata.dir.hadoop}/etc/hadoop/slaves" />
@@ -232,6 +240,10 @@
                         <fileset dir="${bigdata.dir.hive}/lib/" includes="*slf4j*.jar"/>
         </delete>
 
+	<chmod dir="${bigdata.install.dir}" includes="**/*.sh" perm="u+rwx" />
+        <chmod dir="${bigdata.install.dir}" includes="**/*.sh.*" perm="u+rwx" />
+        <chmod dir="${bigdata.install.dir}" includes="**/bin/*" perm="u+rwx" />
+        <chmod dir="${bigdata.install.dir}" includes="**/sbin/*" perm="u+rwx" />
 
 </target>
 </project>

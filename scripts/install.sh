@@ -147,7 +147,7 @@ function download_github_code {
 	git clone $github_url
 	cd apache_hadoop_ant_install
 	$BIGDATA_ROOT/$ant_file/bin/ant -f hadoop_install.xml
-
+}
 
 check_user_profile
 	
@@ -160,10 +160,6 @@ case "$1" in
 		log ''
 	;;
 	fresh_install)
-		setup_ant
-		log ''
-		#install_java
-		log ''
 		format_namenode
 		log ''
 		hivems_initSchema

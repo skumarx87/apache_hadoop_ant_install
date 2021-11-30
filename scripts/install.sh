@@ -160,8 +160,8 @@ case "$1" in
 		log ''
 	;;
 	fresh_install)
-		setup_ant
-		log ''
+		#setup_ant
+		#log ''
 		#install_java
 		log ''
 		format_namenode

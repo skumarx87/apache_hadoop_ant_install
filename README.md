@@ -1,4 +1,8 @@
 # Apache hadoop installation steps
+## Setup the SSH Key authentication for non-root account within server
+* ssh-keygen -t rsa
+* chmod 0700 $HOME/.ssh
+* ssh-copy-id -i $HOME/.ssh/id_rsa.pub sathish@localohost
 ## Install OpenJDK Java  and git using below command
 * su - root
 * yum install java-1.8.0-openjdk.x86_64

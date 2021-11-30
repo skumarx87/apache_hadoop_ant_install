@@ -1,0 +1,238 @@
+<?xml version="1.0"?>
+<project name="Apache hadoop install" default="install">
+	<dirname property="antfile.dir" file="${ant.file}" />
+	<property name="bigdata.props.file" value="bigdata.properties" />
+	<fail message="The Ant property file is missing: ${bigdata.props.file}">
+		<condition>
+			<not><available file="${bigdata.props.file}" /></not>
+		</condition>
+	</fail>
+    <property file="${bigdata.props.file}"/>
+    <fail unless="bigdata.root" message="Missing property 'bigdata.root'" />
+    <fail unless="hadoop.version" message="Missing property 'hadoop.version'" />
+    <fail unless="hive.version" message="Missing property 'hive.version'" />
+    <fail unless="spark.version" message="Missing property 'spark.version'" />
+    <fail unless="spark.hadoop.version" message="Missing property 'spark.hadoop.version" />
+    <fail unless="tez.version" message="Missing property 'tez.version'" />
+    <fail unless="derby.version" message="Missing property 'derby.version'" />
+    <fail unless="apache.hadoop.site" message="Missing property 'apache.hadoop.site'" />
+    <fail unless="apache.hive.site" message="Missing property 'apache.hive.site'" />
+    <fail unless="apache.spark.site" message="Missing property 'apache.spark.site'" />
+    <fail unless="apache.tez.site" message="Missing property 'apache.tez.site'" />
+    <fail unless="apache.derby.site" message="Missing property 'apache.derby.site'" />
+    <fail unless="kafka.version" message="Missing property 'kafka.version'" />
+    <fail unless="kafka_scala.version" message="Missing property 'kafka_scala.version'" />
+    <fail unless="apache.kafka.site" message="Missing property 'apache.kafka.site'" />
+    <fail unless="apache.zookeeper.site" message="Missing property 'apache.zookeeper.site'" />
+    <fail unless="zookeeper.version" message="Missing property 'zookeeper.version'" />
+    <fail unless="bigdata.release.version" message="Missing property 'bigdata.release.version'" />
+
+    <property name="hadoop.file" value="hadoop-${hadoop.version}.tar.gz" />
+    <property name="hive.file" value="apache-hive-${hive.version}-bin.tar.gz" />
+    <property name="tez.file" value="apache-tez-${tez.version}-bin.tar.gz" />
+    <property name="spark.file" value="spark-${spark.version}-bin-without-hadoop.tgz" />
+    <property name="spark_hadoop.file" value="spark-${spark.version}-bin-hadoop${spark.hadoop.version}.tgz" />
+    <property name="derby.file" value="db-derby-${derby.version}-bin.tar.gz" />
+
+    <property name="hadoop.url" value="${apache.hadoop.site}/hadoop/core/hadoop-${hadoop.version}/${hadoop.file}" />
+    <property name="hive.url" value="${apache.hive.site}/hive/hive-${hive.version}/${hive.file}" />
+    <property name="tez.url"  value="${apache.tez.site}/tez/${tez.version}/${tez.file}" />
+    <property name="spark.url" value="${apache.spark.site}/spark/spark-${spark.version}/${spark.file}" />
+    <property name="spark_hadoop.url" value="${apache.spark.site}/spark/spark-${spark.version}/${spark_hadoop.file}" />
+    <property name="derby.url" value="${apache.hadoop.site}/db/derby/db-derby-${derby.version}/${derby.file}" />
+    <property name="bigdata.ver.dir" value="bigdata-${bigdata.release.version}" />
+    <property name="bigdata.install.dir" value="${bigdata.root}/Env/${bigdata.release.version}" /> 
+    <property name="tmp.dir" value="/tmp/bigdata-${bigdata.release.version}-build" />
+    <property name="tmp.download.dir" value="${tmp.dir}/.cache" />
+    <property name="tmp.archive.dir" value="${tmp.dir}/archive" />
+    <property name="tmp.installer.dir" value="${tmp.dir}/installer" />
+    <property name="dest.archive.dir" value="${tmp.archive.dir}/${bigdata.ver.dir}" />
+    <property name="dest.installer.dir" value="${tmp.installer.dir}/${bigdata.ver.dir}" />
+    <property name="dest.archive.file" value="${tmp.dir}/bigdata-archive-${bigdata.release.version}.tar.gz" />
+    <property name="dest.installer.file" value="${tmp.dir}/bigdata-installer-${bigdata.release.version}.tar.gz" />
+
+    <property name="bigdata.dir.scripts" value="${bigdata.install.dir}/scripts" />
+    <property name="bigdata.dir.hadoop" value="${bigdata.install.dir}/hadoop-${hadoop.version}" />
+    <property name="bigdata.dir.hive" value="${bigdata.install.dir}/apache-hive-${hive.version}-bin" />
+    <property name="bigdata.dir.spark" value="${bigdata.install.dir}/spark-${spark.version}-bin-hadoop${spark.hadoop.version}" />
+    <property name="bigdata.dir.hue" value="${bigdata.install.dir}/hue-${hue.version}" />
+    <property name="bigdata.dir.tez" value="${bigdata.install.dir}/apache-tez-${tez.version}-bin" />
+    <property name="bigdata.dir.derby" value="${bigdata.install.dir}/db-derby-${derby.version}-bin" />
+
+    <property name="slaves.file" value="conf/slaves" />
+    <fail message="Please add hostnames of all hdfs/spark workers to file '${slaves.file}'">
+        <condition>
+            <length file="${slaves.file}" when="equal" length="0" />
+        </condition>
+    </fail>
+
+    <fail message="Missing 'namenode.hostname' in bigdata.properties">
+        <condition>
+            <or><equals arg1="${namenode.hostname}" arg2="" />
+                <not><isset property="namenode.hostname" /></not></or>
+        </condition>
+    </fail>
+    <fail message="Missing 'dfs.replication.level' in bigdata.properties">
+        <condition>
+            <or><equals arg1="${dfs.replication.level}" arg2="" />
+                <not><isset property="dfs.replication.level" /></not></or>
+        </condition>
+    </fail>
+
+
+
+    <condition property="deploy.local" value="true">
+        <isset property="deploy.local.dir" />
+    </condition>
+
+
+<!-- <target name="install" depends="build_init, download, unpack_archive,update_profile_path,update_conf" /> -->
+<target name="install" depends="build_init, update_profile_path, update_conf" />
+
+    <target name="build_init">
+
+        <mkdir dir="${tmp.dir}" />
+        <mkdir dir="${tmp.download.dir}" />
+        <mkdir dir="${bigdata.root}" />
+        <mkdir dir="${bigdata.root}/Env" />
+	
+        <mkdir dir="${bigdata.install.dir}" />
+        <mkdir dir="${bigdata.install.dir}/scripts" />
+        <mkdir dir="${bigdata.install.dir}/pids" />
+        <mkdir dir="${bigdata.install.dir}/log" />
+        <mkdir dir="${bigdata.install.dir}/data" />
+        <mkdir dir="${bigdata.install.dir}/data/hive" />
+        <mkdir dir="${bigdata.install.dir}/data/hdfs" />
+	
+        <condition property="file.not.exists.hadoop.archive">
+           <not><available file="${tmp.dir}/${hadoop.file}" type="file" /></not>
+        </condition>
+        <condition property="file.not.exists.hive.archive">
+           <not><available file="${tmp.dir}/${hive.file}" type="file" /></not>
+        </condition>
+        <condition property="file.not.exists.tez.archive">
+           <not><available file="${tmp.dir}/${tez.file}" type="file" /></not>
+        </condition>
+        <condition property="file.not.exists.spark.archive">
+           <not><available file="${tmp.dir}/${spark.file}" type="file" /></not>
+        </condition>
+        <condition property="file.not.exists.spark_hadoop.archive">
+           <not><available file="${tmp.dir}/${spark_hadoop.file}" type="file" /></not>
+        </condition>
+        <condition property="file.not.exists.derby.archive">
+           <not><available file="${tmp.dir}/${derby.file}" type="file" /></not>
+        </condition>
+        <condition property="file.not.exists.kafka.archive">
+           <not><available file="${tmp.dir}/${kafka.file}" type="file" /></not>
+        </condition>
+        <condition property="file.not.exists.zookeeper.archive">
+           <not><available file="${tmp.dir}/${zookeeper.file}" type="file" /></not>
+        </condition>
+
+
+</target>
+
+<target name="download" depends="download_hadoop, download_hive, download_tez, download_spark_hadoop, download_derby" />
+
+    <target name="download_hadoop" if="file.not.exists.hadoop.archive">
+        <echo>"Downloading  - Hadoop ${hadoop.version} from ${hadoop.url}"</echo>
+        <get src="${hadoop.url}" dest="${tmp.download.dir}" />
+        <move file="${tmp.download.dir}/${hadoop.file}" todir="${tmp.dir}" />
+    </target>
+
+    <target name="download_hive" if="file.not.exists.hive.archive">
+        <echo>"Downloading  - Hive ${hive.version} from ${hive.url}"</echo>
+        <get src="${hive.url}" dest="${tmp.download.dir}"/>
+        <move file="${tmp.download.dir}/${hive.file}" todir="${tmp.dir}" />
+    </target>
+
+    <target name="download_tez" if="file.not.exists.tez.archive">
+        <echo>"Downloading  - Tez ${tez.version} from ${tez.url}"</echo>
+        <get src="${tez.url}" dest="${tmp.download.dir}"/>
+        <move file="${tmp.download.dir}/${tez.file}" todir="${tmp.dir}" />
+    </target>
+
+
+    <target name="download_spark_hadoop" if="file.not.exists.spark_hadoop.archive">
+        <echo>"Downloading  - Spark ${spark.version} from ${spark_hadoop.url}"</echo>
+        <get src="${spark_hadoop.url}" dest="${tmp.download.dir}"/>
+        <move file="${tmp.download.dir}/${spark_hadoop.file}" todir="${tmp.dir}" />
+    </target>
+
+    <target name="download_derby" if="file.not.exists.derby.archive">
+        <echo>"Downloading  - Derby ${derby.version} from ${derby.url}"</echo>
+        <get src="${derby.url}" dest="${tmp.download.dir}"/>
+        <move file="${tmp.download.dir}/${derby.file}" todir="${tmp.dir}" />
+    </target>
+    <target name="unpack_archive">
+        <untar dest="${bigdata.install.dir}" compression="gzip" src="${tmp.dir}/${hadoop.file}"  />
+        <untar dest="${bigdata.install.dir}" compression="gzip" src="${tmp.dir}/${hive.file}" />
+        <untar dest="${bigdata.install.dir}" compression="gzip" src="${tmp.dir}/${tez.file}" />
+        <untar dest="${bigdata.install.dir}" compression="gzip" src="${tmp.dir}/${spark.file}" />
+        <untar dest="${bigdata.install.dir}" compression="gzip" src="${tmp.dir}/${spark_hadoop.file}" />
+        <untar dest="${bigdata.install.dir}" compression="gzip" src="${tmp.dir}/${derby.file}" />
+    </target>
+
+    <target name="update_profile_path">
+	<copy overwrite="true" file="conf/bigdata-user-profile.sh.template" tofile="${bigdata.install.dir}/scripts/bigdata-user-profile.sh.template" />
+	<replaceregexp file="${bigdata.install.dir}/scripts/bigdata-user-profile.sh.template" match="BIGDATA_ROOT=(.*)" replace="BIGDATA_ROOT=${bigdata.root}/Env/${bigdata.release.version}" byline="true"/>
+	<replaceregexp file="${bigdata.dir.hadoop}/etc/hadoop/hadoop-env.sh" match="HADOOP_PID_DIR=(.*)" replace="HADOOP_PID_DIR=${bigdata.dir.hadoop}/etc/hadoop" byline="true"/>
+	
+    </target>
+
+<target name="create_soft_link">
+        <symlink overwrite="true" link="${bigdata.install.dir}/hadoop" resource="${bigdata.dir.hadoop}" />
+        <symlink overwrite="true" link="${bigdata.install.dir}/hive" resource="${bigdata.dir.hive}" />
+        <symlink overwrite="true" link="${bigdata.install.dir}/spark" resource="${bigdata.dir.spark}" />
+        <symlink overwrite="true" link="${bigdata.install.dir}/tez" resource="${bigdata.dir.tez}" />
+        <symlink overwrite="true" link="${bigdata.install.dir}/derby" resource="${bigdata.dir.derby}" />
+</target>
+
+<target name="update_conf">
+        <copy overwrite="true" file="conf/hive-env.sh.template" tofile="${bigdata.dir.hive}/conf/hive-env.sh" />
+        <copy overwrite="true" file="conf/hive-site.xml.template" tofile="${bigdata.dir.hive}/conf/hive-site.xml" />
+
+        <copy overwrite="true" file="conf/hadoop-env.sh.template" tofile="${bigdata.dir.hadoop}/etc/hadoop/hadoop-env.sh" />
+        <copy overwrite="true" file="conf/core-site.xml.template" tofile="${bigdata.dir.hadoop}/etc/hadoop/core-site.xml" />
+        <copy overwrite="true" file="conf/hdfs-site.xml.template" tofile="${bigdata.dir.hadoop}/etc/hadoop/hdfs-site.xml" />
+        <copy overwrite="true" file="conf/mapred-site.xml.template" tofile="${bigdata.dir.hadoop}/etc/hadoop/mapred-site.xml" />
+        <copy overwrite="true" file="conf/hadoop-log4j.properties.template" tofile="${bigdata.dir.hadoop}/etc/hadoop/log4j.properties" />
+        <copy overwrite="true" file="conf/tez-site.xml.template" tofile="${bigdata.dir.hadoop}/etc/hadoop/tez-site.xml" />
+
+        <copy overwrite="true" file="conf/spark-env.sh.template" tofile="${bigdata.dir.spark}/conf/spark-env.sh" />
+        <copy overwrite="true" file="conf/spark-defaults.conf.template" tofile="${bigdata.dir.spark}/conf/spark-defaults.conf" />
+        <copy overwrite="true" file="conf/spark.log4j.properties.template" tofile="${bigdata.dir.spark}/conf/log4j.properties" />
+        <copy overwrite="true" file="conf/spark-hive-site.xml.template" tofile="${bigdata.dir.spark}/conf/hive-site.xml" />
+
+        <copy overwrite="true" file="${slaves.file}" tofile="${bigdata.dir.hadoop}/etc/hadoop/slaves" />
+        <symlink overwrite="true" link="${bigdata.dir.spark}/conf/slaves" resource="${bigdata.dir.hadoop}/etc/hadoop/slaves" />
+
+        <replace file="${bigdata.dir.hadoop}/etc/hadoop/mapred-site.xml" token="@@NAMENODE_HOSTNAME@@" value="${namenode.hostname}" />
+        <replace file="${bigdata.dir.hadoop}/etc/hadoop/tez-site.xml" token="@@NAMENODE_HOSTNAME@@" value="${namenode.hostname}" />
+        <replace file="${bigdata.dir.hive}/conf/hive-site.xml" token="@@NAMENODE_HOSTNAME@@" value="${namenode.hostname}" />
+        <replace file="${bigdata.dir.hive}/conf/hive-site.xml" token="@@DATA_LOCATION@@" value="${bigdata.install.dir}/data/hive" />
+        <replace file="${bigdata.dir.spark}/conf/hive-site.xml" token="@@DATA_LOCATION@@" value="${bigdata.install.dir}/data/hive" />
+        <replace file="${bigdata.dir.spark}/conf/hive-site.xml" token="@@NAMENODE_HOSTNAME@@" value="${namenode.hostname}" />
+        <replace file="${bigdata.dir.hadoop}/etc/hadoop/hdfs-site.xml" token="@@NAMENODE_HOSTNAME@@" value="${namenode.hostname}" />
+	<replace file="${bigdata.dir.hive}/conf/hive-site.xml" token="@@BIGDATA_RELEASE_VERSION@@" value="${bigdata.release.version}" />
+	<replace file="${bigdata.dir.hadoop}/etc/hadoop/core-site.xml" token="@@FS_DEFAULT_NAME@@" value="hdfs://${namenode.hostname}:9000" />
+	<replace file="${bigdata.dir.hadoop}/etc/hadoop/hdfs-site.xml" token="@@DFS_REPLICATION_LEVEL@@" value="${dfs.replication.level}" />
+	<replace file="${bigdata.dir.hadoop}/etc/hadoop/hdfs-site.xml" token="@@DATA_LOCATION@@" value="${bigdata.install.dir}/data/hdfs" />
+	
+	<replace file="${bigdata.dir.hadoop}/etc/hadoop/hadoop-env.sh" token="@@BIGDATA_DIR@@" value="${bigdata.install.dir}" />
+	<replace file="${bigdata.dir.spark}/conf/spark-env.sh" token="@@BIGDATA_DIR@@" value="${bigdata.install.dir}" />
+
+        <symlink overwrite="true" link="${bigdata.dir.hadoop}/lib/native/libhadoop.so" resource="${bigdata.dir.hadoop}/lib/native/libhadoop.so.1.0.0" />
+        <symlink overwrite="true" link="${bigdata.dir.hadoop}/lib/native/libhdfs.so" resource="${bigdata.dir.hadoop}/lib/native/libhdfs.so.0.0.0" />
+
+        <!-- Remove duplicate SLF4J JARs on the Hadoop classpath -->
+
+        <delete>
+            <fileset dir="${bigdata.dir.tez}/lib/" includes="slf4j-log4j*.jar"/>
+                        <fileset dir="${bigdata.dir.hive}/lib/" includes="*slf4j*.jar"/>
+        </delete>
+
+
+</target>
+</project>
+

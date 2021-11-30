@@ -1,0 +1,27 @@
+<configuration>
+
+  <property>
+      <name>dfs.namenode.rpc-address</name>
+      <value>@@NAMENODE_HOSTNAME@@:9000</value>
+  </property>
+
+  <property>
+      <name>dfs.replication</name>
+      <value>@@DFS_REPLICATION_LEVEL@@</value>
+   </property>
+
+   <property>
+      <name>dfs.name.dir</name>
+      <value>file://@@DATA_LOCATION@@/namenode</value>
+   </property>
+
+   <property>
+      <name>dfs.data.dir</name>
+      <value>file://@@DATA_LOCATION@@/datanode</value>
+   </property>
+   <property>
+      <name>dfs.permissions.enabled</name>
+      <value>false</value>
+   </property>
+</configuration>
+

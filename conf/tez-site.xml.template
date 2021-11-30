@@ -1,0 +1,14 @@
+<configuration>
+
+  <property>
+    <name>tez.lib.uris</name>
+    <value>hdfs://@@NAMENODE_HOSTNAME@@:9000/usr/bigdata/Envs/tez-@@TEZ_VERSION@@,hdfs://@@NAMENODE_HOSTNAME@@:9000/usr/bigdata/Envs/tez-@@TEZ_VERSION@@/lib</value>
+  </property>
+
+  <property>
+    <name>tez.staging-dir</name>
+    <value>hdfs://@@NAMENODE_HOSTNAME@@:9000/tmp/tez</value>
+  </property>
+
+</configuration>
+

@@ -1,0 +1,32 @@
+## Java home location ##
+alias beeline="beeline -u jdbc:hive2://localhost:10000/default"
+
+export JAVA_HOME=/usr/bigdata/thirdparts/jdk1.8.0_281
+
+export BIGDATA_ROOT=/usr/bigdata/Env/1.0.0
+export BIGDATA_FILE_SYSTEM=hdfs
+
+export HADOOP_HOME=$BIGDATA_ROOT/hadoop
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME=$HADOOP_HOME
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+export HADOOP_YARN_HOME=$HADOOP_HOME
+export HADOOP_INSTALL=$HADOOP_HOME
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export HADOOP_OPTS=-Djava.library.path=$HADOOP_HOME/lib/native
+export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin
+
+export HIVE_HOME=$BIGDATA_ROOT/hive
+export PATH=$HIVE_HOME/bin:$PATH
+
+export TEZ_HOME=$BIGDATA_ROOT/tez
+export TEZ_CONF_DIR=$TEZ_HOME/conf
+export HADOOP_CLASSPATH=$TEZ_CONF_DIR:$TEZ_HOME/*:$TEZ_HOME/lib/*
+
+export SPARK_HOME=$BIGDATA_ROOT/spark
+export SPARK_MASTER_WEBUI_PORT=8080
+export SPARK_WORKER_WEBUI_PORT=8081
+export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
+
+alias bigdata=$BIGDATA_ROOT/bigdata_init.sh
+

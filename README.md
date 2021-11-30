@@ -79,7 +79,15 @@ hdfs dfs -mkdir /user/
 hdfs dfs -copyFromLocal /tmp/test.txt /user/
 hdfs dfs -copyToLocal /user/test.txt /tmp/
 ```
-### Testing Spark context
+### Testing spark from spark-shell
+```
+scala> sc.version
+res0: String = 3.0.3
+
+scala>
+
+```
+### Testing Spark context from Jupyter Notebook
 ```
 import os import pyspark from pyspark.sql import SQLContext, SparkSession
 

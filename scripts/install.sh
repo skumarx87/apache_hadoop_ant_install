@@ -37,7 +37,7 @@ function log {
 function discover_process_by_port {
 
     port=$1
-    pid=$(lsof  -i :9000 |grep LISTEN|awk '{print $2}')
+    pid=$(lsof  -i :$port |grep LISTEN|awk '{print $2}')
     echo "$pid"
 
 }
@@ -53,13 +53,31 @@ function check_user_profile {
 } 
 
 function start_hdfs {
-	echo $JAVA_HOME	
     if [ "$BIGDATA_FILE_SYSTEM" == 'hdfs' ]; then
         log "START HDFS"
         $HADOOP_HOME/sbin/start-dfs.sh
     fi
 
 }
+
+function stop_hdfs {
+
+    if [ "$BIGDATA_FILE_SYSTEM" == 'hdfs' ]; then
+        log "STOP HDFS"
+        $HADOOP_HOME/sbin/stop-dfs.sh
+    fi
+
+}
+
+function stop_spark {
+
+    log "STOP SPARK CLUSTER"
+    $SPARK_HOME/sbin/stop-slaves.sh
+    $SPARK_HOME/sbin/stop-master.sh
+
+}
+
+
 function start_hive_server {
 
     log "START HIVE SERVER"
@@ -107,6 +125,40 @@ function start_hive_metastore {
 
 
 }
+function stop_hive_server {
+	hive2_pid=$(pgrep -f org.apache.hive.service.server.HiveServer2)
+	if [[ -n "$hive2_pid" ]]
+	then
+		kill $hive2_pid
+		if ps -p $hive2_pid > /dev/null ; then
+			echo "Initial kill failed, killing with -9 "
+			kill -9 $hive2_pid
+		fi
+	else
+		echo "Hiveserver2 process not found , HIveserver2 is not running !!!"
+	fi
+}
+
+function stop_hive_meta_server {
+	meta_pid=$(pgrep -f org.apache.hadoop.hive.metastore.HiveMetaStore)
+        if [[ -n "$meta_pid" ]]
+        then
+                kill $meta_pid
+                if ps -p $meta_pid > /dev/null ; then
+                        echo "Initial kill failed, killing with -9 "
+                        kill -9 $meta_pid
+                fi
+        else
+                echo "Hive metastore process not found , Hive metastore is not running !!!"
+        fi
+
+}
+
+
+function stop_hive {
+	stop_hive_server
+	stop_hive_meta_server
+}
 
 
 function start_hive {
@@ -148,6 +200,52 @@ function download_github_code {
 	cd apache_hadoop_ant_install
 	$BIGDATA_ROOT/$ant_file/bin/ant -f hadoop_install.xml
 }
+function status_line {
+	service=$1
+	port=$2
+	pid=$(discover_process_by_port $port)
+	if [ "$pid" != '' ]; then
+		status="Active [$port]"
+		pid_status=$pid
+	else
+		status="Not Detected"
+		pid_status='-'
+	fi
+	printf "%-20s%-10s%-30s\n" "$service" "$pid_status" "$status"
+
+}
+
+function hadoop_all_status {
+	printf '%-20s%-10s%-30s\n' Service Pid Status
+	log '..............................................................................'
+	status_line 'Hadoop HDFS' $hdfs_port
+	status_line 'Hive Metastore' $hivems_port
+	status_line 'Hive Server' $hivesrv_port
+	status_line 'Spark Master' $sparkms_port
+}
+
+function start_spark_master {
+
+    log "Starting Spark master"
+    $SPARK_HOME/sbin/start-master.sh
+
+}
+
+function start_spark_workers {
+
+    log "Starting Spark workers"
+    $SPARK_HOME/sbin/start-slaves.sh spark://${HOSTNAME}:$sparkms_port
+
+}
+
+function start_spark {
+
+    log 'START SPARK CLUSTER'
+    start_spark_master
+    start_spark_workers
+
+}
+
 
 check_user_profile
 	
@@ -158,18 +256,34 @@ case "$1" in
 		log ''
 		start_hive
 		log ''
+	        hadoop_all_status	
+	;;
+	status)
+		hadoop_all_status
 	;;
 	fresh_install)
-<<<<<<< HEAD
-=======
-		#setup_ant
-		#log ''
-		#install_java
-		log ''
->>>>>>> 13a0eceb6e64961a980b0aeca4851ddde170bc5e
 		format_namenode
 		log ''
 		hivems_initSchema
 		log ''
 	;;	
+	stop)
+		stop_hdfs
+		stop_hive
+		stop_spark
+		hadoop_all_status
+	;;
+	stop_hive)
+		stop_hive
+	  	hadoop_all_status	
+	;;
+	stop_hdfs)
+		stop_hdfs
+	;;
+	start_spark)
+		start_spark
+	;;
+	stop_spark)
+		stop_spark
+	;;
 	esac

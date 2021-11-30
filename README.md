@@ -91,4 +91,38 @@ sc = SparkSession
 
 sqlContext = SQLContext(sparkContext=sc.sparkContext, sparkSession=sc) print("Spark Version: " + sc.version) print("PySpark Version: " + pyspark.version)
 ```
+## Testing Hive 
+```
+beeline -u "jdbc:hive2://localhost:10000/default"
+create database test;
+CREATE TABLE test.testTable (id INT,Name STRING);
+
+0: jdbc:hive2://localhost:10000/default> show databases;
++----------------+
+| database_name  |
++----------------+
+| default        |
+| test           |
++----------------+
+0: jdbc:hive2://localhost:10000/default> show create table test.testTable;;
++----------------------------------------------------+
+|                   createtab_stmt                   |
++----------------------------------------------------+
+| CREATE TABLE `test.testTable`(                     |
+|   `id` int,                                        |
+|   `name` string)                                   |
+| ROW FORMAT SERDE                                   |
+|   'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'  |
+| STORED AS INPUTFORMAT                              |
+|   'org.apache.hadoop.mapred.TextInputFormat'       |
+| OUTPUTFORMAT                                       |
+|   'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat' |
+| LOCATION                                           |
+|   'hdfs://laksha.home.com:9000/data/hive/warehouse/test.db/testtable' |
+| TBLPROPERTIES (                                    |
+|   'transient_lastDdlTime'='1638275125')            |
++----------------------------------------------------+
+13 rows selected (0.406 seconds)
+```
+
  

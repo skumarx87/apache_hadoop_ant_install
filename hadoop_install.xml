@@ -33,7 +33,6 @@
     <property name="hadoop.file" value="hadoop-${hadoop.version}.tar.gz" />
     <property name="hive.file" value="apache-hive-${hive.version}-bin.tar.gz" />
     <property name="tez.file" value="apache-tez-${tez.version}-bin.tar.gz" />
-    <property name="spark.file" value="spark-${spark.version}-bin-without-hadoop.tgz" />
     <property name="spark_hadoop.file" value="spark-${spark.version}-bin-hadoop${spark.hadoop.version}.tgz" />
     <property name="derby.file" value="db-derby-${derby.version}-bin.tar.gz" />
 

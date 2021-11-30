@@ -125,4 +125,11 @@ CREATE TABLE test.testTable (id INT,Name STRING);
 13 rows selected (0.406 seconds)
 ```
 
- 
+## Hadoop URL's
+### NameNode URL
+https://${hostname}:9871/dfshealth.html
+### Spark URL
+https://${hostname}:8480/
+### YARN URL
+https://${hostname}:8088/cluster
+

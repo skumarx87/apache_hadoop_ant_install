@@ -29,9 +29,7 @@ spark.version=3.0.3
 spark.hadoop.version=3.2
 tez.version=0.9.2
 derby.version=10.10.2.0
-kafka.version=3.0.0
-kafka_scala.version=2.12
-zookeeper.version=3.6.3
+
 
 ##Download URL ##
 
@@ -40,8 +38,7 @@ apache.hive.site=https://archive.apache.org/dist
 apache.spark.site=https://dlcdn.apache.org/
 apache.tez.site=https://dlcdn.apache.org
 apache.derby.site=https://archive.apache.org/dist
-apache.kafka.site=https://archive.apache.org/dist
-apache.zookeeper.site=https://archive.apache.org/dist
+
 
 deploy.local=true
 deploy.local.dir=/usr/bigdata/buildtmp/parcel

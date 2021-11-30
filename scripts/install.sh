@@ -256,6 +256,8 @@ case "$1" in
 		log ''
 		start_hive
 		log ''
+		start_spark
+		log ''
 	        hadoop_all_status	
 	;;
 	status)

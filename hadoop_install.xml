@@ -89,7 +89,7 @@
     </condition>
 
 
- <target name="install" depends="build_init, download, unpack_archive,update_profile_path,update_conf, create_soft_link" />
+ <target name="install" depends="build_init, download, unpack_archive,update_conf, update_profile_path,create_soft_link" />
 <!-- <target name="install" depends="build_init, update_profile_path, update_conf" /> -->
 
     <target name="build_init">

@@ -210,7 +210,7 @@
         <copy overwrite="true" file="conf/spark.log4j.properties.template" tofile="${bigdata.dir.spark}/conf/log4j.properties" />
         <copy overwrite="true" file="conf/spark-hive-site.xml.template" tofile="${bigdata.dir.spark}/conf/hive-site.xml" />
         
-	<copy overwrite="true" file="scripts/install.sh" tofile="${bigdata.dir.scripts}/install.sh" />
+	<copy overwrite="true" file="scripts/bigadm.sh" tofile="${bigdata.dir.scripts}/bigadm.sh" />
 
         <copy overwrite="true" file="${slaves.file}" tofile="${bigdata.dir.hadoop}/etc/hadoop/slaves" />
         <symlink overwrite="true" link="${bigdata.dir.spark}/conf/slaves" resource="${bigdata.dir.hadoop}/etc/hadoop/slaves" />

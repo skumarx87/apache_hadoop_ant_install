@@ -55,3 +55,29 @@ deploy.local.dir=/usr/bigdata/buildtmp/parcel
 * cd apache_hadoop_ant_install
 * export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.312.b07-2.el8_5.x86_64
 * $HOME/apache-ant-1.9.16/bin/ant -f hadoop_install.xml
+
+# Apache hadoop administration
+Update the $HOME/.bashrc file with below line
+* . /usr/bigdata/Env/1.0.0/scripts/bigdata-user-profile.sh.template
+Then logoff and login back
+
+## NameNode Format and Hive metastore intilize
+* /usr/bigdata/Env/1.0.0/scripts/install.sh fresh_install
+## Managing hadoop services
+### stop and start services
+```
+/usr/bigdata/Env/1.0.0/scripts/install.sh stop
+/usr/bigdata/Env/1.0.0/scripts/install.sh start
+/usr/bigdata/Env/1.0.0/scripts/install.sh status
+```
+![image](https://user-images.githubusercontent.com/10299142/144044045-c2df8f26-3fd4-4911-8d20-770924aca6b4.png)
+### Basic hadoop admin commands
+```
+hdfs dfs -mkdir /tmp
+hdfs dfs -mkdir /tmp
+```
+
+
+
+
+ 

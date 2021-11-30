@@ -48,5 +48,5 @@ deploy.local.dir=/usr/bigdata/buildtmp/parcel
 ```
 ## Run the ant build for hadoop installation
 * cd apache_hadoop_ant_install
-* export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.312.b07-2.el8_5.x86_64/jre
+* export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.312.b07-2.el8_5.x86_64
 * $HOME/apache-ant-1.9.16/bin/ant -f hadoop_install.xml

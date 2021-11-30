@@ -89,7 +89,9 @@ scala>
 ```
 ### Testing Spark context from Jupyter Notebook
 ```
-import os import pyspark from pyspark.sql import SQLContext, SparkSession
+import os 
+import pyspark 
+from pyspark.sql import SQLContext, SparkSession
 
 sc = SparkSession
 .builder

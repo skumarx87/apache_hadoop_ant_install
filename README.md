@@ -3,6 +3,10 @@
 * su - root
 * yum install java-1.8.0-openjdk.x86_64
 * yum install git
+## setup the Java home in user profile
+* edit vi $HOME/.bashrc
+* export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.312.b07-2.el8_5.x86_64/
+* . $HOME/.bashrc
 ## Install and setup Ant
 * wget https://archive.apache.org/dist/ant/binaries/apache-ant-1.9.16-bin.tar.gz -P $HOME/
 * tar -xvf apache-ant-1.9.16-bin.tar.gz -C $HOME/

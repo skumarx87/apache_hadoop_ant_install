@@ -61,7 +61,7 @@ Update the $HOME/.bashrc file with below line
 * . /usr/bigdata/Env/1.0.0/scripts/bigdata-user-profile.sh.template
 Then logoff and login back
 
-## NameNode Format and Hive metastore intilize
+## NameNode Format and Hive metastore initialize
 * /usr/bigdata/Env/1.0.0/scripts/install.sh fresh_install
 ## Managing hadoop services
 ### stop and start services

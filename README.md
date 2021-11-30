@@ -2,6 +2,7 @@
 ## Install OpenJDK Java  and git using below command
 * su - root
 * yum install java-1.8.0-openjdk.x86_64
+* yum install java-1.8.0-openjdk-devel
 * yum install git
 ## Install and setup Ant
 * wget https://archive.apache.org/dist/ant/binaries/apache-ant-1.9.16-bin.tar.gz -P $HOME/

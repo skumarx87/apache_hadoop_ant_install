@@ -71,13 +71,24 @@ Then logoff and login back
 /usr/bigdata/Env/1.0.0/scripts/install.sh status
 ```
 ![image](https://user-images.githubusercontent.com/10299142/144044045-c2df8f26-3fd4-4911-8d20-770924aca6b4.png)
-### Basic hadoop admin commands
+### Basic hdfs admin commands
 ```
+touch /tmp/test.txt
 hdfs dfs -mkdir /tmp
-hdfs dfs -mkdir /tmp
+hdfs dfs -mkdir /user/
+hdfs dfs -copyFromLocal /tmp/test.txt /user/
+hdfs dfs -copyToLocal /user/test.txt /tmp/
 ```
+### Testing Spark context
+```
+import os import pyspark from pyspark.sql import SQLContext, SparkSession
 
+sc = SparkSession
+.builder
+.master('spark://192.168.198.128:7077')
+.appName("sparkFromJupyter")
+.getOrCreate()
 
-
-
+sqlContext = SQLContext(sparkContext=sc.sparkContext, sparkSession=sc) print("Spark Version: " + sc.version) print("PySpark Version: " + pyspark.version)
+```
  

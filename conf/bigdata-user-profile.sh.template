@@ -1,7 +1,7 @@
 ## Java home location ##
 alias beeline="beeline -u jdbc:hive2://localhost:10000/default"
 
-export JAVA_HOME=/usr/bigdata/thirdparts/jdk1.8.0_281
+export JAVA_HOME=/usr/lib/jvm/jre-1.8.0-openjdk
 
 export BIGDATA_ROOT=/usr/bigdata/Env/1.0.0
 export BIGDATA_FILE_SYSTEM=hdfs
@@ -28,5 +28,8 @@ export SPARK_MASTER_WEBUI_PORT=8080
 export SPARK_WORKER_WEBUI_PORT=8081
 export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
 
-alias bigdata=$BIGDATA_ROOT/bigdata_init.sh
+export KAFKA_HOME=$BIGDATA_ROOT/kafka
+export PATH=$PATH:$KAFKA_HOME/bin
+
+alias bigdata=$BIGDATA_ROOT/scripts/bigadm.sh
 

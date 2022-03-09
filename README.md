@@ -14,11 +14,14 @@ yum -y install git
 yum -y install lsof wget zip unzip
 ```
 ## Install and setup ant
-* wget https://archive.apache.org/dist/ant/binaries/apache-ant-1.9.16-bin.tar.gz -P $HOME/
-* tar -xvf $HOME/apache-ant-1.9.16-bin.tar.gz -C $HOME/
+```
+wget https://archive.apache.org/dist/ant/binaries/apache-ant-1.9.16-bin.tar.gz -P $HOME/
+tar -xvf $HOME/apache-ant-1.9.16-bin.tar.gz -C $HOME/
+```
 ## Download the Apache hadoop installation github files
-* git clone https://github.com/skumarx87/apache_hadoop_ant_install.git
-
+```
+git clone https://github.com/skumarx87/apache_hadoop_ant_install.git
+```
 ## Update bigdata.properties file with you server details and location ##
 * cd apache_hadoop_ant_install
 ```

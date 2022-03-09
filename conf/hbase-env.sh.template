@@ -141,3 +141,6 @@
 # Override text processing tools for use by these launch scripts.
 # export GREP="${GREP-grep}"
 # export SED="${SED-sed}"
+export HBASE_PID_DIR=@@HBASE_PID_DIR@@
+export HBASE_LOG_DIR=@@HBASE_LOG_DIR@@
+export JAVA_HOME=@@JAVA_HOME@@

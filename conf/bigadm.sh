@@ -434,6 +434,12 @@ case "$1" in
 	;;
         stop_hbase_master)
                 stop_hbase_master
+	;;
+	start_hbase_region)
+		start_hbase_region
+	;;
+	stop_hbase_region)
+		stop_hbase_region
         ;;
         start_zookeeper)
                 start_zookeeper

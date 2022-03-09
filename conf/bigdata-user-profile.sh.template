@@ -31,5 +31,9 @@ export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
 export KAFKA_HOME=$BIGDATA_ROOT/kafka
 export PATH=$PATH:$KAFKA_HOME/bin
 
+export HBASE_HOME=$BIGDATA_ROOT/hbase
+export PATH=$PATH:$HBASE_HOME/bin
+
+
 alias bigdata=$BIGDATA_ROOT/scripts/bigadm.sh
 

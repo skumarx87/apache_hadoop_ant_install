@@ -60,10 +60,11 @@ deploy.local.dir=/usr/bigdata/buildtmp/parcel
 * ![image](https://user-images.githubusercontent.com/10299142/144032978-b51f2392-5b0b-433d-9f5a-ad751751a91c.png)
 
 ## Run the ant build for hadoop installation
-* cd apache_hadoop_ant_install
-* export JAVA_HOME=/usr/lib/jvm/jre-1.8.0-openjdk
-* $HOME/apache-ant-1.9.16/bin/ant -f hadoop_install.xml
-
+```
+cd apache_hadoop_ant_install
+export JAVA_HOME=/usr/lib/jvm/jre-1.8.0-openjdk
+$HOME/apache-ant-1.9.16/bin/ant -f hadoop_install.xml
+```
 # Apache hadoop administration
 Update the $HOME/.bashrc file with below line
 * . /usr/bigdata/Env/1.0.0/scripts/bigdata-user-profile.sh.template

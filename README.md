@@ -11,7 +11,7 @@ su - root
 yum -y install java-1.8.0-openjdk.x86_64
 yum -y install java-1.8.0-openjdk-devel
 yum -y install git
-yum -y install lsof wget zip unzip
+yum -y install lsof wget zip unzip net-tools
 ```
 ## Install and setup ant
 ```

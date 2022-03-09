@@ -10,6 +10,8 @@ hivesrv_port=10000
 hivems_port=9083
 sparkms_port=7077
 yarn_port=8032
+hbase_master_port=60000
+hbase_region_port=60020
 
 zookeeper_port=2181
 kafka_broker_port=9092
@@ -21,6 +23,56 @@ hive_max_heap="-Xmx4g"
 
 ant_file=apache-ant-1.9.16
 ant_url="https://archive.apache.org/dist/ant/binaries/$ant_file-bin.tar.gz"
+
+function stop_hbase_region {
+	log "STOP HBASE REGION"
+        $HBASE_HOME/bin/hbase-daemon.sh stop regionserver
+        sleep 3
+        status_line 'Hbase Region' $hbase_region_port
+}
+function stop_hbase_master {
+        log "STOP HBASE MASTER"
+        $HBASE_HOME/bin/hbase-daemon.sh stop master
+        sleep 3
+        status_line 'Hbase Region' $hbase_master_port
+
+}
+
+
+function start_hbase_master {
+
+    log "START HBASE MASTER"
+    $HBASE_HOME/bin/hbase-daemon.sh start master
+        for i in `seq 1 10`;
+                do
+                sleep 3
+                pid=$(discover_process_by_port $hbase_master_port)
+		if [ "$pid" != '' ]; then
+			echo "$pid" > $pid_file
+			log "Hbase Master started, pid $pid written to $pid_file"
+			status_line 'Hbase Master' $hbase_master_port
+			break
+                fi
+        done
+		
+}
+function start_hbase_region {
+
+    log "START HBASE REGION"
+    $HBASE_HOME/bin/hbase-daemon.sh start regionserver
+        for i in `seq 1 10`;
+                do
+                sleep 3
+                pid=$(discover_process_by_port $hbase_region_port)
+		if [ "$pid" != '' ]; then
+                	echo "$pid" > $pid_file
+                	log "Hbase Region started, pid $pid written to $pid_file"
+                	status_line 'Hbase Master' $hbase_region_port
+                	break
+                fi
+        done
+
+}
 
 function start_kafka_broker {
 
@@ -288,6 +340,8 @@ function hadoop_all_status {
 	status_line 'Spark Master' $sparkms_port
 	status_line 'Zookeeper' $zookeeper_port
 	status_line 'Kafka Broker' $kafka_broker_port
+	status_line 'Hbase Master' $hbase_master_port
+	status_line 'Hbase Region' $hbase_region_port
 }
 
 function start_spark_master {
@@ -315,6 +369,7 @@ function start_spark {
 
 check_user_profile
 	
+usage="$(basename "$0") start,stop,status,start_hdfs,stop_hdfs,start_hive,stop_hive,start_spark,stop_spark,start_zookeeper,stop_zookeeper,start_kafka_broker,stop_kafka_broker,start_hbase_master,stop_hbase_master,start_hbase_region,stop_hbase_region"
 
 case "$1" in 
 	start)
@@ -323,6 +378,14 @@ case "$1" in
 		start_hive
 		log ''
 		start_spark
+		log ''
+		start_zookeeper
+		log ''
+		start_kafka_broker
+		log ''
+		start_hbase_master
+		log ''
+		start_hbase_region
 		log ''
 	        hadoop_all_status	
 	;;
@@ -339,6 +402,10 @@ case "$1" in
 		stop_hdfs
 		stop_hive
 		stop_spark
+		stop_kafka_broker
+		stop_zookeeper
+		stop_hbase_master
+		stop_hbase_region
 		hadoop_all_status
 	;;
 	stop_hive)
@@ -361,5 +428,19 @@ case "$1" in
 	stop_kafka_broker)
 		stop_kafka_broker
 		stop_zookeeper
+	;;
+	start_hbase_master)
+		start_hbase_master
+	;;
+	start_hbase_region)
+		start_hbase_region
+	;;
+        stop_hbase_master)
+                stop_hbase_master
+        ;;
+        stop_hbase_region)
+                stop_hbase_region
+        ;;
+	*) echo "$usage" 
 	;;
 	esac

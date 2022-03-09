@@ -8,9 +8,10 @@ ssh-copy-id -i $HOME/.ssh/id_rsa.pub sathish@localhost
 ## Install OpenJDK Java  and git using below command
 ```
 su - root
-yum install java-1.8.0-openjdk.x86_64
-yum install java-1.8.0-openjdk-devel
-yum install git
+yum -y install java-1.8.0-openjdk.x86_64
+yum -y install java-1.8.0-openjdk-devel
+yum -y install git
+yum -y install lsof wget zip unzip
 ```
 ## Install and setup ant
 * wget https://archive.apache.org/dist/ant/binaries/apache-ant-1.9.16-bin.tar.gz -P $HOME/

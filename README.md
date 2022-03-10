@@ -108,7 +108,9 @@ sc = SparkSession
 .appName("sparkFromJupyter")
 .getOrCreate()
 
-sqlContext = SQLContext(sparkContext=sc.sparkContext, sparkSession=sc) print("Spark Version: " + sc.version) print("PySpark Version: " + pyspark.version)
+sqlContext = SQLContext(sparkContext=sc.sparkContext, sparkSession=sc) 
+print("Spark Version: " + sc.version) 
+print("PySpark Version: " + pyspark.version)
 ```
 ## Testing Hive 
 ```

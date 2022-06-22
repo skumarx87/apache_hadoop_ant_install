@@ -12,9 +12,12 @@ yum -y install java-1.8.0-openjdk.x86_64
 yum -y install java-1.8.0-openjdk-devel
 yum -y install git
 yum -y install lsof wget zip unzip net-tools
+useradd hadoop
+password hadoop
 ```
 ## Install and setup ant
 ```
+su - hadoop
 wget https://archive.apache.org/dist/ant/binaries/apache-ant-1.9.16-bin.tar.gz -P $HOME/
 tar -xvf $HOME/apache-ant-1.9.16-bin.tar.gz -C $HOME/
 ```

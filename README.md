@@ -29,7 +29,7 @@ git clone https://github.com/skumarx87/apache_hadoop_ant_install.git
 * cd apache_hadoop_ant_install
 ```
 bigdata.root=/usr/bigdata
-bigdata.user=sathish
+bigdata.user=hadoop
 namenode.hostname=laksha.home.com
 dfs.replication.level=1
 

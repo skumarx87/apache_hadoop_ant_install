@@ -59,6 +59,10 @@
     <name>hbase.regionserver.info.port</name>
     <value>60030</value>
   </property>
+  <property>
+    <name>hbase.master.port</name>
+    <value>60000</value>
+  </property>
 <property>
       <name>hbase.zookeeper.quorum</name>
       <value>@@ZOOKEEPER.QUORUM@@</value>

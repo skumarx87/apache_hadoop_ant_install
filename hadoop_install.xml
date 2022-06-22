@@ -248,6 +248,7 @@
 	<copy overwrite="true" file="scripts/bigadm.sh" tofile="${bigdata.dir.scripts}/bigadm.sh" />
 
 	<copy overwrite="true" file="conf/zookeeper.properties.template" tofile="${bigdata.dir.kafka}/config/zookeeper.properties" />
+        <replace file="${bigdata.dir.kafka}/config/zookeeper.properties" token="@@ZOOKEEPER_SERVER@@" value="${zookeeper.quorum}" />
 
         <copy overwrite="true" file="${slaves.file}" tofile="${bigdata.dir.hadoop}/etc/hadoop/slaves" />
         <symlink overwrite="true" link="${bigdata.dir.spark}/conf/slaves" resource="${bigdata.dir.hadoop}/etc/hadoop/slaves" />
